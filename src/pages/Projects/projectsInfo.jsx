@@ -68,7 +68,7 @@ const ProjectDetails = () => {
   if (languages) totalLines = Object.values(languages).reduce((a, b) => a + b, 0);
 
   useEffect(() => {
-    document.title = `📂 - ${projectName} My Project`;
+    document.title = `📂 ${projectName} My Project`;
   }, [projectName]);
 
   return (
