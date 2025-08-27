@@ -1,5 +1,5 @@
 const routes = {
-  home: "/",
+  about: "/",
   skill: "/skills",
   games: "/games",
   projects: "/projects",

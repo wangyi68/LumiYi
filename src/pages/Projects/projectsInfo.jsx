@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import { FaGithub } from "react-icons/fa"; // ✅ import icon GitHub
 import "./readme.scss";
 
 const ProjectDetails = () => {
@@ -11,7 +12,6 @@ const ProjectDetails = () => {
   const [languages, setLanguages] = useState(null);
   const userGithub = "wangyi68";
 
-  // 📝 thử lấy README từ main → master
   const fetchReadme = useCallback(async () => {
     const branches = ["main", "master"];
     for (let branch of branches) {
@@ -24,11 +24,11 @@ const ProjectDetails = () => {
           setReadme(<ReactMarkdown>{data}</ReactMarkdown>);
           return;
         }
-      } catch (err) {
-        // thử branch khác
-      }
+      } catch (err) {}
     }
-    setReadme(<p className="text-slate-600 italic">❌ 该仓库没有 README.md</p>);
+    setReadme(
+      <p className="text-slate-600 italic">❌ 该仓库没有 README.md</p>
+    );
   }, [projectName]);
 
   useEffect(() => {
@@ -45,7 +45,6 @@ const ProjectDetails = () => {
         setError(err);
       }
     };
-
     fetchProjectDetails();
   }, [projectName, fetchReadme]);
 
@@ -62,14 +61,11 @@ const ProjectDetails = () => {
         setError(err);
       }
     };
-
     fetchLanguages();
   }, [projectName]);
 
   let totalLines = 0;
-  if (languages) {
-    totalLines = Object.values(languages).reduce((acc, cur) => acc + cur, 0);
-  }
+  if (languages) totalLines = Object.values(languages).reduce((a, b) => a + b, 0);
 
   useEffect(() => {
     document.title = `📂 - ${projectName} My Project`;
@@ -78,13 +74,26 @@ const ProjectDetails = () => {
   return (
     <div className="w-full font-bold text-slate-900">
       <h2 className="text-2xl mb-1">{projectName}</h2>
+
+      {/* Button GitHub Repo with icon and hover effect */}
+      {project && (
+        <a
+          href={project.html_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 mt-2 mb-4 px-6 py-3 bg-gray-900 text-white rounded-lg text-lg font-semibold transition-transform transform hover:scale-105 hover:bg-black"
+        >
+          <FaGithub size={24} /> View on GitHub
+        </a>
+      )}
+
       {error ? (
         <p className="text-red-600">错误: {error.message || String(error)}</p>
       ) : project ? (
         <div>
           <p>描述: {project.description || "无可用描述"}</p>
 
-          {/* 📊 Stats cơ bản */}
+          {/* Stats */}
           <div className="flex gap-6 mt-2 text-sm text-slate-700">
             <span>⭐ 星星: {project.stargazers_count}</span>
             <span>🍴 叉子: {project.forks_count}</span>
@@ -92,27 +101,25 @@ const ProjectDetails = () => {
             <span>🐞 问题: {project.open_issues_count}</span>
           </div>
 
-          {/* 🖌 Ngôn ngữ */}
+          {/* Languages */}
           {languages ? (
             <div>
               <h3 className="mt-4">语言:</h3>
               <div className="w-full flex mt-1 rounded-full overflow-hidden">
-                {Object.keys(languages).map((language, index) => (
+                {Object.keys(languages).map((lang, idx) => (
                   <div
-                    key={index}
-                    className={`${getLanguageColor(language)} h-4`}
-                    style={{
-                      width: `${(languages[language] / totalLines) * 100}%`,
-                    }}
+                    key={idx}
+                    className={`${getLanguageColor(lang)} h-4`}
+                    style={{ width: `${(languages[lang] / totalLines) * 100}%` }}
                   ></div>
                 ))}
               </div>
               <div className="flex gap-x-8 mt-2 flex-wrap">
-                {Object.keys(languages).map((language, index) => (
-                  <div key={index} className="text-sm">
-                    {language}{" "}
+                {Object.keys(languages).map((lang, idx) => (
+                  <div key={idx} className="text-sm">
+                    {lang}{" "}
                     <span className="text-slate-600">
-                      ({((languages[language] / totalLines) * 100).toFixed(2)}%)
+                      ({((languages[lang] / totalLines) * 100).toFixed(2)}%)
                     </span>
                   </div>
                 ))}
@@ -122,7 +129,7 @@ const ProjectDetails = () => {
             <div className="w-full rounded-xl bg-slate-300 animate-pulse h-12 mt-2"></div>
           )}
 
-          {/* 📄 README hoặc fallback */}
+          {/* README */}
           <div className="mt-6 rounded-xl bg-slate-100 w-full">
             <h3 className="ml-2 pt-2">📄 README.md</h3>
             <div className="p-6 readme">{readme}</div>
@@ -139,43 +146,24 @@ export default ProjectDetails;
 
 const getLanguageColor = (language) => {
   switch (language.toLowerCase()) {
-    case "javascript":
-      return "bg-[#F1E05A]";
-    case "html":
-      return "bg-[#E34C26]";
-    case "css":
-      return "bg-[#563D7B]";
-    case "scss":
-      return "bg-[#C6538C]";
-    case "python":
-      return "bg-[#3472A5]";
-    case "c++":
-      return "bg-[#F34B7D]";
-    case "typescript":
-      return "bg-[#3078C6]";
-    case "pug":
-      return "bg-[#A86454]";
-    case "java":
-      return "bg-[#B07219]";
-    case "objective-c":
-      return "bg-[#448DFB]";
-    case "objective-c++":
-      return "bg-[#6866FA]";
-    case "kotlin":
-      return "bg-[#AA7AFA]";
-    case "ruby":
-      return "bg-[#701516]";
-    case "cmake":
-      return "bg-[#DA3434]";
-    case "c":
-      return "bg-[#13171D]";
-    case "c#":
-      return "bg-[#16861F]";
-    case "php":
-      return "bg-[#4F5D95]";
-    case "shell":
-      return "bg-[#8AE053]";
-    default:
-      return "bg-gray-300";
+    case "javascript": return "bg-[#F1E05A]";
+    case "html": return "bg-[#E34C26]";
+    case "css": return "bg-[#563D7B]";
+    case "scss": return "bg-[#C6538C]";
+    case "python": return "bg-[#3472A5]";
+    case "c++": return "bg-[#F34B7D]";
+    case "typescript": return "bg-[#3078C6]";
+    case "pug": return "bg-[#A86454]";
+    case "java": return "bg-[#B07219]";
+    case "objective-c": return "bg-[#448DFB]";
+    case "objective-c++": return "bg-[#6866FA]";
+    case "kotlin": return "bg-[#AA7AFA]";
+    case "ruby": return "bg-[#701516]";
+    case "cmake": return "bg-[#DA3434]";
+    case "c": return "bg-[#13171D]";
+    case "c#": return "bg-[#16861F]";
+    case "php": return "bg-[#4F5D95]";
+    case "shell": return "bg-[#8AE053]";
+    default: return "bg-gray-300";
   }
 };

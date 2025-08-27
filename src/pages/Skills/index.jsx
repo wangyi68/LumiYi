@@ -36,7 +36,7 @@ class Skill {
     const filledStars = Array(this.level).fill(solidStar);
     const emptyStars = Array(5 - this.level).fill(regularStar);
 
-    // Highlight matched text
+    // 高亮匹配文字
     const highlightText = (text, query) => {
       if (!query) return text;
       const regex = new RegExp(`(${query})`, "gi");
@@ -57,7 +57,7 @@ class Skill {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -15 }}
         transition={{ duration: 0.3 }}
-        className="p-5 bg-white border border-slate-200 rounded-2xl shadow hover:shadow-lg transition-all duration-300"
+        className="p-5 bg-white border border-slate-200 rounded-2xl shadow hover:shadow-lg transition-all duration-300 relative group"
       >
         <div className="flex items-start gap-4">
           <div className="size-14 min-w-14 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center shadow-inner">
@@ -83,6 +83,16 @@ class Skill {
             </div>
           </div>
         </div>
+
+        {/* Tooltip */}
+        <motion.div
+          initial={{ opacity: 0, y: 5 }}
+          whileHover={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-black text-white text-xs rounded px-2 py-1 pointer-events-none z-50 opacity-0 group-hover:opacity-100"
+        >
+          {this.description}
+        </motion.div>
       </motion.div>
     );
   }
@@ -103,31 +113,31 @@ function Skills() {
 
   // ================== SKILL LIST ==================
   const skillList = [
-    new Skill("HTML", "The core building block of web pages, defining structure and semantic content.", htmlIcon, 4),
-    new Skill("CSS", "The styling language used to design modern, responsive, and beautiful UIs.", cssIcon, 4),
-    new Skill("JavaScript", "A versatile language enabling dynamic, interactive web experiences.", javascriptIcon, 3),
-    new Skill("TypeScript", "Superset of JS with static typing, improving scalability and maintainability.", typescriptIcon, 3),
-    new Skill("Python", "A high-level language great for AI, ML, data science, and backend systems.", pythonIcon, 3),
-    new Skill("MongoDB", "A NoSQL database designed for scalability and flexibility with JSON-like docs.", mongodbIcon, 3),
-    new Skill("PostgreSQL", "Advanced open-source SQL database with strong reliability and performance.", postgresqlIcon, 3),
-    new Skill("ExpressJS", "A lightweight Node.js web framework for APIs and server-side apps.", expressIcon, 3),
-    new Skill("ReactJS", "Popular JS library for building fast, component-based UIs.", reactIcon, 4),
-    new Skill("Next.js", "React framework for SSR, full-stack apps, and optimized performance.", nextjsIcon, 3),
-    new Skill("Tailwind CSS", "Utility-first CSS framework for rapid UI development.", tailwindIcon, 4),
-    new Skill("Node.js", "Server-side runtime for scalable and event-driven web applications.", nodejsIcon, 3),
-    new Skill("Docker", "Tool for containerization, ensuring consistent environments for deployment.", dockerIcon, 3),
-    new Skill("Visual Studio Code", "Lightweight and powerful code editor with rich extensions.", vscodeIcon, 5),
-    new Skill("GitHub", "Version control and collaboration platform for developers.", githubIcon, 4),
-    new Skill("Notepad++", "Simple, fast, and lightweight text editor for quick coding.", notepadppIcon, 4),
+    new Skill("HTML", "网页的核心构建块，定义结构和语义内容。", htmlIcon, 4),
+    new Skill("CSS", "用于设计现代响应式美观界面的样式语言。", cssIcon, 4),
+    new Skill("JavaScript", "实现动态、交互式网页体验的多用途语言。", javascriptIcon, 3),
+    new Skill("TypeScript", "JavaScript的超集，提供静态类型，提高可维护性。", typescriptIcon, 3),
+    new Skill("Python", "适合AI、机器学习、数据科学和后端开发的高级语言。", pythonIcon, 3),
+    new Skill("MongoDB", "用于可扩展性和灵活性的NoSQL数据库，支持JSON文档。", mongodbIcon, 3),
+    new Skill("PostgreSQL", "高级开源SQL数据库，可靠性和性能强大。", postgresqlIcon, 3),
+    new Skill("ExpressJS", "轻量级Node.js框架，用于API和服务器端应用。", expressIcon, 3),
+    new Skill("ReactJS", "用于构建快速、基于组件的用户界面的流行JS库。", reactIcon, 4),
+    new Skill("Next.js", "支持SSR和全栈应用的React框架，性能优化。", nextjsIcon, 3),
+    new Skill("Tailwind CSS", "用于快速UI开发的实用CSS框架。", tailwindIcon, 4),
+    new Skill("Node.js", "用于可扩展事件驱动web应用的服务器端运行环境。", nodejsIcon, 3),
+    new Skill("Docker", "容器化工具，确保部署环境一致。", dockerIcon, 3),
+    new Skill("Visual Studio Code", "轻量强大的代码编辑器，支持丰富插件。", vscodeIcon, 5),
+    new Skill("GitHub", "开发者的版本控制和协作平台。", githubIcon, 4),
+    new Skill("Notepad++", "简单、快速、轻量的文本编辑器。", notepadppIcon, 4),
   ];
 
   const categories = [
-    { icon: "💻", name: "Languages", contents: skillList.slice(0, 5) },
-    { icon: "🎨", name: "Frameworks & Libraries", contents: skillList.slice(5, 11) },
-    { icon: "🛠️", name: "Tools & Platforms", contents: skillList.slice(11, 16) },
+    { icon: "💻", name: "编程语言", contents: skillList.slice(0, 5) },
+    { icon: "🎨", name: "框架与库", contents: skillList.slice(5, 11) },
+    { icon: "🛠️", name: "工具与平台", contents: skillList.slice(11, 16) },
   ];
 
-  // Filter skills by search
+  // 根据搜索过滤技能
   const filteredCategories = categories.map((category) => ({
     ...category,
     contents: category.contents.filter((skill) =>
@@ -140,17 +150,17 @@ function Skills() {
       {/* Header */}
       <div className="mb-6 flex text-3xl gap-3 font-bold items-center">
         <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-[36px] w-2 rounded"></div>
-        <h2>💡 My Skills</h2>
+        <h2>💡 我的技能</h2>
       </div>
       <p className="text-neutral-600 font-normal mb-6">
-        A showcase of the technologies and tools I use to build projects. 🚀
+        展示我用于构建项目的技术和工具。🚀
       </p>
 
       {/* Search bar */}
       <div className="mb-6">
         <input
           type="text"
-          placeholder="🔍 Search skills..."
+          placeholder="🔍 搜索技能..."
           className="w-full md:w-1/2 px-4 py-2 rounded-xl border border-slate-300 shadow-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -200,7 +210,7 @@ function Skills() {
                       ))
                     ) : (
                       <p className="text-neutral-500 col-span-2 text-center">
-                        No skills found 🔎
+                        未找到技能 🔎
                       </p>
                     )}
                   </motion.div>

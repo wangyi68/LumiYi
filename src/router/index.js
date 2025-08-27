@@ -9,9 +9,10 @@ import Projects from "../pages/Projects";
 import ProjectDetails from "../pages/Projects/projectsInfo";
 import pinterest from "../pages/Pinteres"
 import Contact from "../pages/Contact";
-
+import Home from "../pages/Home";
 const publicRoutes = [
-  { path: config.routes.home, component: About },
+  { path: config.routes.home, component: Home },
+  { path: config.routes.about, component: About },
   { path: config.routes.skill, component: Skills },
   { path: config.routes.games, component: Games },
   { path: config.routes.projects, component: Projects },
