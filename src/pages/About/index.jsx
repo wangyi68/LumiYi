@@ -24,6 +24,14 @@ import Cert2 from "../../assets/gallery/images2.jpg";
 import Cert3 from "../../assets/gallery/images3.jpg";
 import Cert4 from "../../assets/gallery/images4.jpg";
 import Cert5 from "../../assets/gallery/images5.jpg";
+import Cert6 from "../../assets/gallery/images6.jpg";
+import Cert7 from "../../assets/gallery/images7.jpg";
+import Cert8 from "../../assets/gallery/images8.jpg";
+import Cert9 from "../../assets/gallery/images9.jpg";
+import Cert10 from "../../assets/gallery/images10.jpg";
+import Cert11 from "../../assets/gallery/images11.jpg";
+import Cert12 from "../../assets/gallery/images12.jpg";
+
 
 function About() {
   // Set document title
@@ -44,6 +52,13 @@ function About() {
     { src: Cert3, name: "Images 3" },
     { src: Cert4, name: "Images 4" },
     { src: Cert5, name: "Images 5" },
+    { src: Cert6, name: "Images 6" },
+    { src: Cert7, name: "Images 7" },
+    { src: Cert8, name: "Images 8" },
+    { src: Cert9, name: "Images 9" },
+    { src: Cert10, name: "Images 10" },
+    { src: Cert11, name: "Images 11" },
+    { src: Cert12, name: "Images 12" },
   ];
 
   // Favorite videos
@@ -215,7 +230,7 @@ function About() {
           <div className="p-5 rounded-xl border bg-slate-50 border-slate-200 shadow hover:shadow-md transition">
             <div className="flex gap-3 items-center text-slate-700 font-semibold">
               <FontAwesomeIcon icon={faBriefcase} />
-              <p>工作</p>
+              <p>Work</p>
             </div>
             <div className="flex mt-6 gap-3 items-center">
               <div className="w-12 h-12 rounded-full bg-slate-800 text-white text-lg flex items-center justify-center">
@@ -235,23 +250,24 @@ function About() {
           <div className="p-5 rounded-xl border bg-slate-50 border-slate-200 shadow hover:shadow-md transition">
             <div className="flex gap-3 items-center text-slate-700 font-semibold">
               <FontAwesomeIcon icon={faUserGraduate} />
-              <p>教育</p>
+              <p>Education</p>
             </div>
             <div className="flex mt-6 gap-3 items-center">
               <div className="w-12 h-12 rounded-full bg-slate-800 text-white text-lg flex items-center justify-center">
                 <FontAwesomeIcon icon={faSchool} />
               </div>
               <div className="flex-1">
-                <h5 className="text-sm font-medium">SeiRei Student</h5>
+                <h5 className="text-sm font-medium">University of Technology - Vietnam National University, Ho Chi Minh City</h5>
+                <p className="text-sm font-medium">HCMUT</p>
                 <div className="flex justify-between text-xs text-slate-600">
-                  <p>普通学生</p>
-                  <p>201x - 202x</p>
+                  <p>Oh no My Dream</p>
+                  <p>Coming Soon</p>
                 </div>
               </div>
             </div>
             <div className="mt-6">
               <a
-                href="https://gdtxmoduc.quangngai.edu.vn/"
+                href="https://hcmut.edu.vn/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-2 flex text-sm hover:bg-slate-700 items-center gap-2 justify-center text-white bg-slate-800 rounded-lg transition"
