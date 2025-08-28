@@ -21,6 +21,7 @@
     "framer-motion": "^12.23.12",
     "http-proxy-middleware": "^3.0.5",
     "lightgallery": "^2.9.0-beta.1",
+    "lucide-react": "^0.542.0",
     "react": "^18.2.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^18.2.0",

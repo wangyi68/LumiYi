@@ -1,0 +1,109 @@
+import { Link } from "react-router-dom";
+import {
+  User,
+  FolderGit2,
+  Cpu,
+  Gamepad2,
+  MonitorCog,
+  Image as PinterestIcon,
+  Mail,
+} from "lucide-react";
+import { motion } from "framer-motion";
+
+function Nav() {
+  const navItemStyle =
+    "flex items-center gap-2 bg-cyan-200 px-3 py-1.5 rounded-md shadow-sm font-semibold";
+
+  // animation config
+  const hoverAnim = {
+    scale: 1.05,
+    y: -2,
+    transition: { type: "spring", stiffness: 300 },
+  };
+  const tapAnim = { scale: 0.95 };
+
+  return (
+    <div className="flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3">
+      <div className="flex gap-3 text-neutral-800 text-base flex-wrap">
+        <Link to="/">
+          <motion.div
+            className={navItemStyle}
+            whileHover={hoverAnim}
+            whileTap={tapAnim}
+          >
+            <User className="w-5 h-5 text-yellow-600" />
+            About
+          </motion.div>
+        </Link>
+
+        <Link to="/projects">
+          <motion.div
+            className={navItemStyle}
+            whileHover={hoverAnim}
+            whileTap={tapAnim}
+          >
+            <FolderGit2 className="w-5 h-5 text-purple-600" />
+            Projects
+          </motion.div>
+        </Link>
+
+        <Link to="/skills">
+          <motion.div
+            className={navItemStyle}
+            whileHover={hoverAnim}
+            whileTap={tapAnim}
+          >
+            <Cpu className="w-5 h-5 text-pink-600" />
+            Skills
+          </motion.div>
+        </Link>
+
+        <Link to="/games">
+          <motion.div
+            className={navItemStyle}
+            whileHover={hoverAnim}
+            whileTap={tapAnim}
+          >
+            <Gamepad2 className="w-5 h-5 text-emerald-600" />
+            Games
+          </motion.div>
+        </Link>
+
+        <Link to="/specs">
+          <motion.div
+            className={navItemStyle}
+            whileHover={hoverAnim}
+            whileTap={tapAnim}
+          >
+            <MonitorCog className="w-5 h-5 text-cyan-900" />
+            Specs
+          </motion.div>
+        </Link>
+
+        <Link to="/pinterest">
+          <motion.div
+            className={navItemStyle}
+            whileHover={hoverAnim}
+            whileTap={tapAnim}
+          >
+            <PinterestIcon className="w-5 h-5 text-indigo-600" />
+            Pinterest
+          </motion.div>
+        </Link>
+
+        <Link to="/contact">
+          <motion.div
+            className={navItemStyle}
+            whileHover={hoverAnim}
+            whileTap={tapAnim}
+          >
+            <Mail className="w-5 h-5 text-red-600" />
+            Contact
+          </motion.div>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export default Nav;

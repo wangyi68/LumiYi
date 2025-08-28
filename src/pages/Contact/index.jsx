@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "emailjs-com";
 import Confetti from "react-confetti";
 
@@ -17,6 +17,7 @@ function Contact() {
   const [statusMessage, setStatusMessage] = useState("");
   const [statusType, setStatusType] = useState(""); // "success", "error", "warning"
   const [showConfetti, setShowConfetti] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,6 +39,7 @@ function Contact() {
       return;
     }
 
+    setLoading(true);
     emailjs
       .send(
         "service_opv9r6k",
@@ -56,30 +58,33 @@ function Contact() {
           setStatusMessage("✅ Thank you! Your message has been sent.");
           setFormData({ name: "", email: "", message: "" });
           setShowConfetti(true);
-          setTimeout(() => setShowConfetti(false), 3000);
+          setTimeout(() => setShowConfetti(false), 4000);
         },
         (error) => {
           console.error(error);
           setStatusType("error");
           setStatusMessage("❌ Failed to send. Please try again.");
         }
-      );
+      )
+      .finally(() => setLoading(false));
   };
 
   return (
-    <div className="w-full pb-10 relative">
+    <div className="w-full pb-16 relative">
       {/* Confetti */}
-      {showConfetti && <Confetti numberOfPieces={200} gravity={0.3} />}
+      {showConfetti && <Confetti numberOfPieces={300} gravity={0.25} />}
 
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="mb-8 flex text-3xl gap-3 font-bold items-center justify-center"
       >
         <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-[36px] w-2 rounded"></div>
-        <h2>📬 Contact Me</h2>
+        <h2 className="bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+          📬 Contact Me
+        </h2>
       </motion.div>
 
       <p className="text-neutral-600 font-normal mb-6 text-center max-w-xl mx-auto">
@@ -93,7 +98,7 @@ function Contact() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-white shadow-2xl rounded-3xl p-8 border border-slate-200 max-w-2xl mx-auto space-y-6"
+        className="bg-white/80 backdrop-blur-md shadow-2xl rounded-3xl p-8 border border-slate-200 max-w-2xl mx-auto space-y-6"
       >
         <div>
           <label className="block font-semibold mb-2">Name</label>
@@ -129,27 +134,47 @@ function Contact() {
           />
         </div>
 
-        {statusMessage && (
-          <p
-            className={`text-center font-medium text-lg ${
-              statusType === "success"
-                ? "text-green-500"
-                : statusType === "error"
-                ? "text-red-500"
-                : "text-yellow-500"
-            }`}
-          >
-            {statusMessage}
-          </p>
-        )}
+        {/* Status Message */}
+        <AnimatePresence>
+          {statusMessage && (
+            <motion.p
+              key={statusMessage}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className={`text-center font-medium text-lg ${
+                statusType === "success"
+                  ? "text-green-500"
+                  : statusType === "error"
+                  ? "text-red-500"
+                  : "text-yellow-500"
+              }`}
+            >
+              {statusMessage}
+            </motion.p>
+          )}
+        </AnimatePresence>
 
+        {/* Submit Button */}
         <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: !loading ? 1.05 : 1 }}
+          whileTap={{ scale: !loading ? 0.95 : 1 }}
           type="submit"
-          className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-4 rounded-xl font-bold shadow-lg hover:shadow-2xl transition text-lg"
+          disabled={loading}
+          className={`w-full py-4 rounded-xl font-bold shadow-lg transition text-lg flex items-center justify-center gap-2
+            ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-2xl"
+            }`}
         >
-          Send Message
+          {loading ? (
+            <motion.div
+              className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"
+            />
+          ) : (
+            "Send Message"
+          )}
         </motion.button>
       </motion.form>
     </div>
