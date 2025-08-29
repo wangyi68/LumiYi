@@ -1,12 +1,24 @@
-Simply a personal website
+# 🌐 Simply a Personal Website
 
-## 💢 Status: 
-- 🟥 Never complete!
-- 💻 Webside: [wangyi.is-a.dev](https://wangyi.is-a.dev/)
+## 💢 Status
+- 🟥 **Never complete!**
+- 💻 **Website:** [wangyi.is-a.dev](https://wangyi.is-a.dev/)
+
+---
+
 ## 🍃 Information
-- 🧨 **Use:** JavaScript, SCSS, CSS, HTML.
-- 💦 **Frameworks & Styling**: ReactJS, Tailwindcss.
-- ⚡ **API**: Github, Lanyard, Open Weather Map
+- 🧨 **Languages:** JavaScript, SCSS, CSS, HTML  
+- 🎨 **Frameworks & Styling:** ReactJS, TailwindCSS  
+- ⚡ **API Integrations:** GitHub, Lanyard, Open Weather Map  
 
-Credit Kitomc
+---
 
+## 🖼️ Preview
+<p align="center">
+  <img src="https://github.com/wangyi68/LumiYi/blob/main/image.webp?raw=true" alt="Preview" width="600" />
+</p>
+
+---
+
+## ✨ Credit
+- 👤 **Kitomc**
