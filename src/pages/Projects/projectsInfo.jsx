@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { FaGithub } from "react-icons/fa"; // ✅ import icon GitHub
+import rehypeRaw from "rehype-raw"; // ✅ hỗ trợ HTML trong markdown
+import { FaGithub } from "react-icons/fa";
 import "./readme.scss";
 
 const ProjectDetails = () => {
@@ -12,6 +13,7 @@ const ProjectDetails = () => {
   const [languages, setLanguages] = useState(null);
   const userGithub = "wangyi68";
 
+  // ✅ Fetch README.md
   const fetchReadme = useCallback(async () => {
     const branches = ["main", "master"];
     for (let branch of branches) {
@@ -21,7 +23,13 @@ const ProjectDetails = () => {
         );
         if (response.ok) {
           const data = await response.text();
-          setReadme(<ReactMarkdown>{data}</ReactMarkdown>);
+
+          // Render với rehypeRaw để hỗ trợ HTML trong markdown
+          setReadme(
+            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+              {data}
+            </ReactMarkdown>
+          );
           return;
         }
       } catch (err) {}
@@ -31,6 +39,7 @@ const ProjectDetails = () => {
     );
   }, [projectName]);
 
+  // ✅ Fetch repo details
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
@@ -48,6 +57,7 @@ const ProjectDetails = () => {
     fetchProjectDetails();
   }, [projectName, fetchReadme]);
 
+  // ✅ Fetch repo languages
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
@@ -75,7 +85,7 @@ const ProjectDetails = () => {
     <div className="w-full font-bold text-slate-900">
       <h2 className="text-2xl mb-1">{projectName}</h2>
 
-      {/* Button GitHub Repo with icon and hover effect */}
+      {/* Button GitHub Repo */}
       {project && (
         <a
           href={project.html_url}
