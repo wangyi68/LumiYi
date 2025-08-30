@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw"; // ✅ hỗ trợ HTML trong markdown
+import rehypeRaw from "rehype-raw"; // ✅ render HTML trong markdown
 import { FaGithub } from "react-icons/fa";
 import "./readme.scss";
 
@@ -13,33 +13,49 @@ const ProjectDetails = () => {
   const [languages, setLanguages] = useState(null);
   const userGithub = "wangyi68";
 
-  // ✅ Fetch README.md
-  const fetchReadme = useCallback(async () => {
-    const branches = ["main", "master"];
-    for (let branch of branches) {
+  // ✅ Fetch README.md dựa trên default_branch
+  const fetchReadme = useCallback(
+    async (branch) => {
       try {
         const response = await fetch(
           `https://raw.githubusercontent.com/${userGithub}/${projectName}/${branch}/README.md`
         );
         if (response.ok) {
-          const data = await response.text();
+          let data = await response.text();
 
-          // Render với rehypeRaw để hỗ trợ HTML trong markdown
+          // 🔥 Fix ảnh Markdown ![alt](./path)
+          data = data.replace(
+            /!\[(.*?)\]\((\.\/.*?)\)/g,
+            (match, alt, path) =>
+              `![${alt}](https://raw.githubusercontent.com/${userGithub}/${projectName}/${branch}/${path.replace("./", "")})`
+          );
+
+          // 🔥 Fix ảnh HTML <img src="./path">
+          data = data.replace(
+            /<img([^>]+)src=["']\.\/(.*?)["']([^>]*)>/g,
+            (match, before, path, after) =>
+              `<img${before}src="https://raw.githubusercontent.com/${userGithub}/${projectName}/${branch}/${path}"${after}>`
+          );
+
           setReadme(
             <ReactMarkdown rehypePlugins={[rehypeRaw]}>
               {data}
             </ReactMarkdown>
           );
-          return;
+          return true;
         }
-      } catch (err) {}
-    }
-    setReadme(
-      <p className="text-slate-600 italic">❌ 该仓库没有 README.md</p>
-    );
-  }, [projectName]);
+      } catch (err) {
+        console.error("Fetch README error:", err);
+      }
+      setReadme(
+        <p className="text-slate-600 italic">❌ 该仓库没有 README.md</p>
+      );
+      return false;
+    },
+    [projectName]
+  );
 
-  // ✅ Fetch repo details
+  // ✅ Fetch repo details (lấy default_branch)
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
@@ -49,7 +65,10 @@ const ProjectDetails = () => {
         if (!response.ok) throw new Error("未找到回购协议");
         const data = await response.json();
         setProject(data);
-        await fetchReadme();
+
+        // lấy branch mặc định
+        const branch = data.default_branch || "main";
+        await fetchReadme(branch);
       } catch (err) {
         setError(err);
       }

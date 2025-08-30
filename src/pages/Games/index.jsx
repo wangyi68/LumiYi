@@ -84,7 +84,7 @@ function SafeImage({ src, alt, className, ...props }) {
 // Skeleton Card Component
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-4 w-[280px] animate-pulse">
+    <div className="bg-white-40 rounded-2xl shadow-lg p-4 w-[280px] animate-pulse">
       <div className="h-44 bg-slate-200 rounded-xl mb-3"></div>
       <div className="h-5 bg-slate-200 rounded w-4/5 mb-2"></div>
       <div className="h-4 bg-slate-200 rounded w-3/5"></div>
@@ -110,7 +110,7 @@ function Toast({ message, onClose }) {
       {message}
       <button
         onClick={onClose}
-        className="ml-4 text-white/80 hover:text-white font-bold"
+        className="ml-4 text-white hover:text-white font-bold"
         aria-label="关闭提示"
       >
         ✕
@@ -256,7 +256,7 @@ function CodeCard({ data, onCopy, isCopied }) {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={classNames(
-        "bg-white rounded-2xl shadow-lg p-4 w-[245px] text-left hover:ring-2 transition",
+        "bg-white-40 rounded-2xl shadow-lg p-4 w-[245px] text-left hover:ring-2 transition",
         data.is_active ? "ring-green-400" : "ring-red-400",
         isCopied ? "bg-yellow-50" : ""
       )}
@@ -296,7 +296,7 @@ function EventCard({ data, onClick }) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="bg-white rounded-2xl shadow-lg p-4 w-[250px] text-left hover:ring-2 ring-cyan-600 transition cursor-pointer"
+      className="bg-white-40 rounded-2xl shadow-lg p-4 w-[250px] text-left hover:ring-2 ring-cyan-600 transition cursor-pointer"
       onClick={() => onClick(data)}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -406,7 +406,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           "px-4 py-2 rounded-lg text-sm font-medium",
           currentPage === 1
             ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-            : "bg-white border border-slate-200 hover:bg-slate-50"
+            : "bg-white-40 border border-slate-200 hover:bg-slate-50"
         )}
         aria-label="上一页"
       >
@@ -422,7 +422,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
             "px-4 py-2 rounded-lg text-sm font-medium",
             currentPage === page
               ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-transparent"
-              : "bg-white border border-slate-200 hover:bg-slate-50"
+              : "bg-white-40 border border-slate-200 hover:bg-slate-50"
           )}
           aria-label={`跳转到第 ${page} 页`}
         >
@@ -438,7 +438,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           "px-4 py-2 rounded-lg text-sm font-medium",
           currentPage === totalPages
             ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-            : "bg-white border border-slate-200 hover:bg-slate-50"
+            : "bg-white-40 border border-slate-200 hover:bg-slate-50"
         )}
         aria-label="下一页"
       >
@@ -481,7 +481,7 @@ function GamesList({ topGames, allGames }) {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block rounded-xl overflow-hidden hover:ring-4 ring-cyan-500 bg-white shadow-lg transition"
+              className="inline-block rounded-xl overflow-hidden hover:ring-4 ring-cyan-500 bg-white-40 shadow-lg transition"
               aria-label={`访问 ${name} 网站`}
             >
               <SafeImage
@@ -514,7 +514,7 @@ function GamesList({ topGames, allGames }) {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex justify-center items-center border rounded-lg bg-white p-2 hover:ring-2 ring-cyan-500 shadow-sm transition"
+              className="flex justify-center items-center border rounded-lg bg-white-40 p-2 hover:ring-2 ring-cyan-500 shadow-sm transition"
               aria-label={`访问 ${name} 网站`}
             >
               <SafeImage
@@ -604,7 +604,7 @@ function GamesDashboard({
               "flex items-center gap-2 px-5 py-2.5 rounded-full border text-base font-medium shadow-sm",
               activeGame === t.key
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-transparent"
-                : "bg-white border-slate-300 hover:bg-slate-100"
+                : "bg-white-40 border-slate-300 hover:bg-slate-100"
             )}
             aria-label={`切换到 ${t.label} 游戏`}
           >
@@ -633,7 +633,7 @@ function GamesDashboard({
               "px-5 py-2.5 rounded-lg border text-base font-medium shadow-sm",
               activeTab === t.key
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-transparent"
-                : "bg-white border-slate-300 hover:bg-slate-100"
+                : "bg-white-40 border-slate-300 hover:bg-slate-100"
             )}
             aria-label={`切换到 ${t.label} 标签`}
           >

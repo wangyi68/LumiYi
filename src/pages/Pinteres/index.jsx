@@ -133,7 +133,7 @@ function PinterestPage() {
             onClick={() => setModalData(null)}
           >
             <motion.div
-              className="relative max-w-4xl w-full bg-white rounded-2xl shadow-2xl 
+              className="relative max-w-4xl w-full bg-white-100 rounded-2xl shadow-2xl 
                          p-6 flex flex-col items-center"
               variants={modalVariants}
               initial="hidden"
@@ -156,7 +156,7 @@ function PinterestPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15, duration: 0.4 }}
               >
-                <h3 className="text-2xl font-bold text-neutral-800">
+                <h3 className="text-2xl font-extrabold text-neutral-800">
                   {modalData.name}
                 </h3>
                 <p className="text-neutral-600 text-lg">{modalData.description}</p>

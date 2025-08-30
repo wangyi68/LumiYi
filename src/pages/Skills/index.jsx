@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
@@ -23,80 +23,68 @@ import vscodeIcon from "../../assets/icons/vscode.svg";
 import githubIcon from "../../assets/icons/github.svg";
 import notepadppIcon from "../../assets/icons/notepadplusplus.svg";
 
-// ================= CLASS SKILL ==================
-class Skill {
-  constructor(name, description, img, level) {
-    this.name = name;
-    this.description = description;
-    this.img = img;
-    this.level = level;
-  }
+// ================== SKILL CARD ==================
+const SkillCard = memo(function SkillCard({ skill, searchQuery }) {
+  const filledStars = Array(skill.level).fill(solidStar);
+  const emptyStars = Array(5 - skill.level).fill(regularStar);
 
-  render(searchQuery) {
-    const filledStars = Array(this.level).fill(solidStar);
-    const emptyStars = Array(5 - this.level).fill(regularStar);
+  const highlightText = (text, query) => {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, "gi");
+    return text.split(regex).map((part, i) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <span key={i} className="text-cyan-600 font-bold">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
 
-    // 高亮匹配文字
-    const highlightText = (text, query) => {
-      if (!query) return text;
-      const regex = new RegExp(`(${query})`, "gi");
-      return text.split(regex).map((part, i) =>
-        part.toLowerCase() === query.toLowerCase() ? (
-          <span key={i} className="text-cyan-600 font-bold">
-            {part}
-          </span>
-        ) : (
-          part
-        )
-      );
-    };
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className="p-5 bg-white/50 backdrop-blur-md border border-slate-200/40 rounded-2xl shadow-lg hover:shadow-cyan-200/50 hover:-translate-y-1 transition-all duration-300 relative group"
+    >
+      <div className="flex items-start gap-4">
+        <div className="size-14 min-w-14 rounded-xl overflow-hidden bg-slate-50/70 flex items-center justify-center shadow-inner">
+          <Img className="size-10" src={skill.img} alt={skill.name} />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-neutral-800">
+            {highlightText(skill.name, searchQuery)}
+          </h3>
+          <p className="text-sm text-neutral-600">
+            {highlightText(skill.description, searchQuery)}
+          </p>
 
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -15 }}
-        transition={{ duration: 0.3 }}
-        className="p-5 bg-white border border-slate-200 rounded-2xl shadow hover:shadow-lg transition-all duration-300 relative group"
-      >
-        <div className="flex items-start gap-4">
-          <div className="size-14 min-w-14 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center shadow-inner">
-            <Img className="size-10" src={this.img} alt={this.name} />
+          {/* Stars */}
+          <div className="flex items-center gap-1 mt-2 text-yellow-500">
+            {[...filledStars, ...emptyStars].map((icon, i) => (
+              <FontAwesomeIcon key={i} icon={icon} />
+            ))}
           </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-neutral-800">
-              {highlightText(this.name, searchQuery)}
-            </h3>
-            <p className="text-sm text-neutral-600">{this.description}</p>
-            <div className="flex items-center gap-1 mt-2 text-yellow-500">
-              {[...filledStars, ...emptyStars].map((icon, i) => (
-                <FontAwesomeIcon key={i} icon={icon} />
-              ))}
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${(this.level / 5) * 100}%` }}
-                transition={{ duration: 0.5 }}
-                className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full"
-              ></motion.div>
-            </div>
+
+          {/* Progress bar */}
+          <div className="w-full bg-gray-200/60 rounded-full h-2 mt-2 overflow-hidden">
+            <div
+              className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 h-2 rounded-full"
+              style={{ width: `${(skill.level / 5) * 100}%` }}
+            />
           </div>
         </div>
+      </div>
 
-        {/* Tooltip */}
-        <motion.div
-          initial={{ opacity: 0, y: 5 }}
-          whileHover={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-black text-white text-xs rounded px-2 py-1 pointer-events-none z-50 opacity-0 group-hover:opacity-100"
-        >
-          {this.description}
-        </motion.div>
-      </motion.div>
-    );
-  }
-}
+      {/* Tooltip */}
+      <div className="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-black/70 text-white text-xs rounded px-2 py-1 pointer-events-none opacity-0 group-hover:opacity-100 transition">
+        {skill.description}
+      </div>
+    </motion.div>
+  );
+});
 
 // ================== MAIN ==================
 function Skills() {
@@ -111,24 +99,23 @@ function Skills() {
     setOpenCategory(openCategory === index ? null : index);
   };
 
-  // ================== SKILL LIST ==================
   const skillList = [
-    new Skill("HTML", "网页的核心构建块，定义结构和语义内容。", htmlIcon, 4),
-    new Skill("CSS", "用于设计现代响应式美观界面的样式语言。", cssIcon, 4),
-    new Skill("JavaScript", "实现动态、交互式网页体验的多用途语言。", javascriptIcon, 3),
-    new Skill("TypeScript", "JavaScript的超集，提供静态类型，提高可维护性。", typescriptIcon, 3),
-    new Skill("Python", "适合AI、机器学习、数据科学和后端开发的高级语言。", pythonIcon, 3),
-    new Skill("MongoDB", "用于可扩展性和灵活性的NoSQL数据库，支持JSON文档。", mongodbIcon, 3),
-    new Skill("PostgreSQL", "高级开源SQL数据库，可靠性和性能强大。", postgresqlIcon, 3),
-    new Skill("ExpressJS", "轻量级Node.js框架，用于API和服务器端应用。", expressIcon, 3),
-    new Skill("ReactJS", "用于构建快速、基于组件的用户界面的流行JS库。", reactIcon, 4),
-    new Skill("Next.js", "支持SSR和全栈应用的React框架，性能优化。", nextjsIcon, 3),
-    new Skill("Tailwind CSS", "用于快速UI开发的实用CSS框架。", tailwindIcon, 4),
-    new Skill("Node.js", "用于可扩展事件驱动web应用的服务器端运行环境。", nodejsIcon, 3),
-    new Skill("Docker", "容器化工具，确保部署环境一致。", dockerIcon, 3),
-    new Skill("Visual Studio Code", "轻量强大的代码编辑器，支持丰富插件。", vscodeIcon, 5),
-    new Skill("GitHub", "开发者的版本控制和协作平台。", githubIcon, 4),
-    new Skill("Notepad++", "简单、快速、轻量的文本编辑器。", notepadppIcon, 4),
+    { name: "HTML", description: "网页的核心构建块，定义结构和语义内容。", img: htmlIcon, level: 4 },
+    { name: "CSS", description: "用于设计现代响应式美观界面的样式语言。", img: cssIcon, level: 4 },
+    { name: "JavaScript", description: "实现动态、交互式网页体验的多用途语言。", img: javascriptIcon, level: 3 },
+    { name: "TypeScript", description: "JavaScript的超集，提供静态类型，提高可维护性。", img: typescriptIcon, level: 3 },
+    { name: "Python", description: "适合AI、机器学习、数据科学和后端开发的高级语言。", img: pythonIcon, level: 3 },
+    { name: "MongoDB", description: "用于可扩展性和灵活性的NoSQL数据库，支持JSON文档。", img: mongodbIcon, level: 3 },
+    { name: "PostgreSQL", description: "高级开源SQL数据库，可靠性和性能强大。", img: postgresqlIcon, level: 3 },
+    { name: "ExpressJS", description: "轻量级Node.js框架，用于API和服务器端应用。", img: expressIcon, level: 3 },
+    { name: "ReactJS", description: "用于构建快速、基于组件的用户界面的流行JS库。", img: reactIcon, level: 4 },
+    { name: "Next.js", description: "支持SSR和全栈应用的React框架，性能优化。", img: nextjsIcon, level: 3 },
+    { name: "Tailwind CSS", description: "用于快速UI开发的实用CSS框架。", img: tailwindIcon, level: 4 },
+    { name: "Node.js", description: "用于可扩展事件驱动web应用的服务器端运行环境。", img: nodejsIcon, level: 3 },
+    { name: "Docker", description: "容器化工具，确保部署环境一致。", img: dockerIcon, level: 3 },
+    { name: "Visual Studio Code", description: "轻量强大的代码编辑器，支持丰富插件。", img: vscodeIcon, level: 5 },
+    { name: "GitHub", description: "开发者的版本控制和协作平台。", img: githubIcon, level: 4 },
+    { name: "Notepad++", description: "简单、快速、轻量的文本编辑器。", img: notepadppIcon, level: 4 },
   ];
 
   const categories = [
@@ -137,11 +124,12 @@ function Skills() {
     { icon: "🛠️", name: "工具与平台", contents: skillList.slice(11, 16) },
   ];
 
-  // 根据搜索过滤技能
   const filteredCategories = categories.map((category) => ({
     ...category,
-    contents: category.contents.filter((skill) =>
-      skill.name.toLowerCase().includes(searchQuery.toLowerCase())
+    contents: category.contents.filter(
+      (skill) =>
+        skill.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        skill.description.toLowerCase().includes(searchQuery.toLowerCase())
     ),
   }));
 
@@ -152,7 +140,7 @@ function Skills() {
         <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-[36px] w-2 rounded"></div>
         <h2>💡 我的技能</h2>
       </div>
-      <p className="text-neutral-600 font-normal mb-6">
+      <p className="text-neutral-700 font-normal mb-6">
         展示我用于构建项目的技术和工具。🚀
       </p>
 
@@ -161,7 +149,7 @@ function Skills() {
         <input
           type="text"
           placeholder="🔍 搜索技能..."
-          className="w-full md:w-1/2 px-4 py-2 rounded-xl border border-slate-300 shadow-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+          className="w-full md:w-1/2 px-4 py-2 rounded-xl border border-slate-300/40 bg-white/50 backdrop-blur-md shadow focus:ring-2 focus:ring-cyan-500 focus:outline-none"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -175,38 +163,34 @@ function Skills() {
           return (
             <div
               key={index}
-              className="border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
+              className="border border-slate-200/40 bg-white/40 backdrop-blur-md rounded-xl overflow-hidden shadow hover:shadow-cyan-200/50 transition"
             >
               {/* Category Header */}
               <div
-                className="cursor-pointer flex justify-between items-center py-4 px-5 bg-gradient-to-r from-slate-50 to-white hover:from-cyan-50 hover:to-blue-50 transition-colors"
+                className="cursor-pointer flex justify-between items-center py-4 px-5 hover:bg-white/40 transition-colors"
                 onClick={() => toggleCategory(index)}
               >
-                <motion.h2
-                  className="text-xl font-semibold flex items-center gap-2"
-                  animate={isOpen ? { rotate: [0, -5, 5, -5, 0] } : {}}
-                  transition={{ duration: 0.5 }}
-                >
+                <h2 className="text-xl font-semibold flex items-center gap-2">
                   <span>{category.icon}</span> {category.name}
-                </motion.h2>
+                </h2>
                 <span className="text-cyan-600 text-2xl font-bold">
                   {isOpen ? "−" : "+"}
                 </span>
               </div>
 
               {/* Category Content */}
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 {isOpen && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="grid md:grid-cols-2 gap-4 p-5 bg-white"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="grid md:grid-cols-2 gap-4 p-5 overflow-hidden"
                   >
                     {category.contents.length > 0 ? (
                       category.contents.map((skill, idx) => (
-                        <div key={idx}>{skill.render(searchQuery)}</div>
+                        <SkillCard key={idx} skill={skill} searchQuery={searchQuery} />
                       ))
                     ) : (
                       <p className="text-neutral-500 col-span-2 text-center">
