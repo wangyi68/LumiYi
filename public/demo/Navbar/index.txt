@@ -2,11 +2,12 @@ import { Link } from "react-router-dom";
 
 function Nav() {
   const navItemStyle =
-    "flex gap-1 px-2 py-[2px] rounded-md bg-white/60 backdrop-blur-sm border border-white/30 hover:bg-cyan-500 hover:text-white transition";
+    "flex gap-1 bg-cyan-200 px-2 py-[2px] rounded-md hover:bg-cyan-500 transition";
 
   const aboutIcon = (
     <svg
       className="w-5 h-5 text-yellow-500 translate-y-[1px]"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       viewBox="0 0 24 24"
@@ -22,6 +23,7 @@ function Nav() {
   const projectIcon = (
     <svg
       className="w-5 h-5 text-purple-600 translate-y-[1px]"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       viewBox="0 0 24 24"
@@ -37,6 +39,7 @@ function Nav() {
   const skillIcon = (
     <svg
       className="w-5 h-5 text-pink-600 translate-y-[-1px]"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       viewBox="0 0 24 24"
@@ -52,6 +55,7 @@ function Nav() {
   const gameIcon = (
     <svg
       className="w-5 h-5 text-emerald-600 translate-y-[1px]"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       viewBox="0 0 24 24"
@@ -72,6 +76,7 @@ function Nav() {
   const specIcon = (
     <svg
       className="w-5 h-5 text-cyan-950 translate-y-[1px]"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       viewBox="0 0 24 24"
@@ -87,6 +92,7 @@ function Nav() {
   const animeIcon = (
     <svg
       className="w-5 h-5 text-indigo-600 translate-y-[1px]"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       viewBox="0 0 24 24"
@@ -102,6 +108,7 @@ function Nav() {
   const contactIcon = (
     <svg
       className="w-5 h-5 text-red-600 translate-y-[1px]"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       viewBox="0 0 24 24"
@@ -112,20 +119,29 @@ function Nav() {
   );
 
   return (
-    <div
-      className="
-        flex md:p-2 pb-8 py-2 px-5 md:rounded-xl shadow-lg md:mt-3
-        bg-white/40 backdrop-blur-md border border-white/30
-      "
-    >
+    <div className="flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none">
       <div className="flex gap-3 text-neutral-800 font-bold text-base flex-wrap">
-        <Link to="/"><div className={navItemStyle}>About {aboutIcon}</div></Link>
-        <Link to="/projects"><div className={navItemStyle}>Projects {projectIcon}</div></Link>
-        <Link to="/skills"><div className={navItemStyle}>Skills {skillIcon}</div></Link>
-        <Link to="/games"><div className={navItemStyle}>Games {gameIcon}</div></Link>
-        <Link to="/specs"><div className={navItemStyle}>Specs {specIcon}</div></Link>
-        <Link to="/pinterest"><div className={navItemStyle}>Pinterest {animeIcon}</div></Link>
-        <Link to="/contact"><div className={navItemStyle}>Contact {contactIcon}</div></Link>
+        <Link to="/">
+          <div className={navItemStyle}>About {aboutIcon}</div>
+        </Link>
+        <Link to="/projects">
+          <div className={navItemStyle}>Projects {projectIcon}</div>
+        </Link>
+        <Link to="/skills">
+          <div className={navItemStyle}>Skills {skillIcon}</div>
+        </Link>
+        <Link to="/games">
+          <div className={navItemStyle}>Games {gameIcon}</div>
+        </Link>
+        <Link to="/specs">
+          <div className={navItemStyle}>Specs {specIcon}</div>
+        </Link>
+        <Link to="/pinterest">
+          <div className={navItemStyle}>Pinterest {animeIcon}</div>
+        </Link>
+        <Link to="/contact">
+          <div className={navItemStyle}>Contact {contactIcon}</div>
+        </Link>
       </div>
     </div>
   );

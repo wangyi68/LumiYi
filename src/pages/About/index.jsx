@@ -98,10 +98,10 @@ function About() {
   };
 
   return (
-    <div className="font-bold text-neutral-800 w-full pb-20 px-4 md:px-8">
+    <div className="font-extrabold text-neutral-800 w-full pb-20 px-4 md:px-8">
       {/* Title */}
       <motion.div
-        className="mb-12 flex items-center gap-3 text-3xl font-bold"
+        className="mb-12 flex items-center gap-3 text-3xl font-extrabold"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}

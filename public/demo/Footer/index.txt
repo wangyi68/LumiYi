@@ -14,8 +14,9 @@ function Footer() {
       try {
         // Fetch IP
         const ipRes = await fetch("https://api.ipify.org?format=json");
-        if (!ipRes.ok) throw new Error("Failed to fetch IP");
-
+        if (!ipRes.ok) {
+          throw new Error("Failed to fetch IP");
+        }
         const ipData = await ipRes.json();
         setIp(ipData.ip || "Unknown");
 
@@ -24,10 +25,11 @@ function Footer() {
         let total;
 
         if (!visited) {
-          total = await trackVisitor(); // New visitor
-          localStorage.setItem("visited", "true");
+          // New visitor: track and increment views
+          total = await trackVisitor();
         } else {
-          total = await getTotalViews(); // Returning visitor
+          // Returning visitor: get total views without incrementing
+          total = await getTotalViews();
         }
 
         setViews(total);
@@ -35,6 +37,7 @@ function Footer() {
       } catch (err) {
         console.error("Error:", err);
         if (retries > 0) {
+          console.log(`Retrying... (${retries} attempts left)`);
           setTimeout(() => fetchIPAndViews(retries - 1), 1000);
         } else {
           setIp("Unavailable");
@@ -48,22 +51,15 @@ function Footer() {
   }, []);
 
   return (
-    <footer
-      className="
-        flex p-5 md:rounded-xl shadow-lg md:mt-3
-        bg-white/40 backdrop-blur-md border border-white/20
-        transition-all duration-500 animate-fadeIn
-      "
-    >
+    <div className="flex p-5 md:rounded-xl bg-white shadow-sm md:mt-3">
       <div className="sm:flex text-center justify-between text-sm w-full text-neutral-800 font-medium">
-        {/* Left Section */}
         <p>
           2025 © WangYi • Made with{" "}
           <a
             href="https://react.dev/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan-600 hover:underline"
+            className="text-cyan-600"
           >
             React
           </a>{" "}
@@ -72,17 +68,15 @@ function Footer() {
             href="https://tailwindcss.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan-600 hover:underline"
+            className="text-cyan-600"
           >
             Tailwind
           </a>
         </p>
-
-        {/* Right Section */}
-        <p className="flex gap-3 items-center justify-center mt-2 sm:mt-0">
+        <p className="flex gap-3 items-center justify-center">
           <Tippy animation="scale" content="我明白了">
             <a
-              className="text-cyan-600 hover:underline"
+              className="text-cyan-600"
               href="https://omar11.sa/"
               target="_blank"
               rel="noopener noreferrer"
@@ -90,22 +84,14 @@ function Footer() {
               Omar Abdulaziz <span className="text-neutral-800">•</span> ✨
             </a>
           </Tippy>
-
-          {/* IP */}
-          <span className="text-neutral-600 transition-opacity duration-500">
-            🌐 {ip}
+          <span className="text-neutral-500">IP: {ip}</span>
+          <span className="text-neutral-500">
+            👁 {views !== null ? views : "Loading..."} View{views !== 1 ? "s" : ""}
           </span>
-
-          {/* Views */}
-          <span className="text-neutral-600 transition-opacity duration-500">
-            👁 {views !== null ? views : "…"} View{views !== 1 ? "s" : ""}
-          </span>
-
-          {/* Error */}
           {error && <span className="text-red-500">{error}</span>}
         </p>
       </div>
-    </footer>
+    </div>
   );
 }
 

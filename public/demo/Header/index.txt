@@ -8,12 +8,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
   return (
-    <div
-      className="
-        p-5 md:rounded-xl shadow-lg text-neutral-800
-        bg-white/40 backdrop-blur-md border border-white/30
-      "
-    >
+    <div className="p-5 md:rounded-xl bg-white shadow-sm text-neutral-800">
       <Discord />
       <div className="flex mt-4 gap-2 text-xl">
         {/* Gmail */}
@@ -21,7 +16,7 @@ function Header() {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-white/60 backdrop-blur-sm border border-white/30 size-[38px] items-center flex justify-center hover:bg-cyan-500 hover:text-white transition"
+            className="rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500"
             href="mailto:wangyiisyi20@gmail.com"
           >
             <FontAwesomeIcon icon={faEnvelope} />
@@ -33,7 +28,7 @@ function Header() {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-white/60 backdrop-blur-sm border border-white/30 size-[38px] items-center flex justify-center hover:bg-cyan-500 hover:text-white transition"
+            className="rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500"
             href="https://github.com/wangyi68"
           >
             <FontAwesomeIcon icon={faGithub} />
@@ -45,7 +40,7 @@ function Header() {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-white/60 backdrop-blur-sm border border-white/30 size-[38px] items-center flex justify-center hover:bg-cyan-500 hover:text-white transition"
+            className="rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500"
             href="https://discordredirect.discordsafe.com/users/1391995229241868459"
           >
             <FontAwesomeIcon icon={faDiscord} />
@@ -57,7 +52,7 @@ function Header() {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-white/60 backdrop-blur-sm border border-white/30 size-[38px] flex items-center justify-center hover:bg-cyan-500 transition"
+            className="rounded-full bg-cyan-200 size-[38px] flex items-center justify-center hover:bg-cyan-500"
             href="https://lumi-lumi-alpha.vercel.app/"
           >
             <img
@@ -73,7 +68,7 @@ function Header() {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-white/60 backdrop-blur-sm border border-white/30 size-[38px] items-center flex justify-center hover:bg-cyan-500 hover:text-white transition"
+            className="rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500"
             href="https://fb.com/wangyiisyi20"
           >
             <FontAwesomeIcon icon={faFacebook} />
@@ -85,7 +80,7 @@ function Header() {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-white/60 backdrop-blur-sm border border-white/30 size-[38px] flex items-center justify-center hover:bg-cyan-500 transition"
+            className="rounded-full bg-cyan-200 size-[38px] flex items-center justify-center hover:bg-cyan-500"
             href="https://zalo.me/84912579859"
           >
             <img
