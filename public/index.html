@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/gif" href="%PUBLIC_URL%/2.gif" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="主页网站简介 WangYi!" />
+  <meta property="og:site_name" content="WangYi Profile Page">
+  <meta property="og:image" content="https://github.com/wangyi68/LumiYi/blob/main/image.webp?raw=true">
+  <meta property="og:title" content="WangYi Profile Page">
+  <meta property="og:description" content="How Can I Get You If I'm Normal ? on" />
+  <meta property="og:url" content="https://wangyi.is-a.dev">
+  <title>WangYi</title>
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+
+  <!-- Audio elements for preloading -->
+  <audio id="background-music" preload="auto" crossorigin="anonymous">
+    Trình duyệt của bạn không hỗ trợ thẻ audio.
+  </audio>
+  <audio id="preload-audio" preload="auto" crossorigin="anonymous" style="display:none;"></audio>
+
+  <script>
+    const audio = document.getElementById('background-music');
+    const preloadAudio = document.getElementById('preload-audio');
+    audio.volume = preloadAudio.volume = 0.3;
+    
+    // Danh sách nhạc
+    const musicTracks = [
+      { src: "/music/NormalNoMore.mp3", name: "Normal No More", loaded: false, duration: null },
+      { src: "/music/SYENSAN.mp3", name: "SYENSAN", loaded: false, duration: null }
+    ];
+    
+    const audioCache = new Map();
+    let currentTrackIndex = 0;
+    let nextTrackIndex = 1;
+    let audioInitialized = false;
+    let userHasInteracted = false;
+    let isPlaying = false;
+    let playPromise = null;
+    let autoplayAttempted = false;
+    let isLoading = false;
+
+    // Preload track
+    const preloadTrack = (trackIndex) => {
+      const track = musicTracks[trackIndex];
+      if (!track || track.loaded || audioCache.has(track.src)) return Promise.resolve(true);
+
+      return new Promise((resolve) => {
+        const tempAudio = new Audio();
+        tempAudio.addEventListener('canplaythrough', () => {
+          track.loaded = true;
+          track.duration = tempAudio.duration;
+          audioCache.set(track.src, tempAudio);
+          console.log(`✅ Loaded: ${track.name} (${Math.round(track.duration)}s)`);
+          resolve(true);
+        });
+        tempAudio.addEventListener('error', () => {
+          console.warn(`❌ Failed to load: ${track.name}`);
+          resolve(false);
+        });
+        setTimeout(() => resolve(false), 10000);
+        tempAudio.preload = 'auto';
+        tempAudio.src = track.src;
+        tempAudio.load();
+      });
+    };
+
+    const preloadBatch = async () => {
+      await Promise.allSettled(musicTracks.map((_, i) => preloadTrack(i)));
+      console.log('🎵 All tracks preload completed');
+    };
+
+    const selectRandomTrack = async () => {
+      let available = musicTracks.map((t, i) => ({ t, i })).filter(({ t }) => t.loaded || audioCache.has(t.src));
+      if (!available.length) {
+        currentTrackIndex = 0;
+        await preloadTrack(0);
+      } else {
+        currentTrackIndex = available[Math.floor(Math.random() * available.length)].i;
+      }
+      const track = musicTracks[currentTrackIndex];
+      audio.src = audioCache.has(track.src) ? audioCache.get(track.src).src : track.src;
+      nextTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
+      preloadTrack(nextTrackIndex);
+      console.log(`🎵 Selected: ${track.name}`);
+      return track;
+    };
+
+    const safePlay = async () => {
+      try {
+        isLoading = true;
+        if (playPromise) await playPromise.catch(() => {});
+        if (audio.readyState < 3) {
+          await new Promise((res) => {
+            const ready = () => { audio.removeEventListener('canplay', ready); audio.removeEventListener('canplaythrough', ready); res(); };
+            audio.addEventListener('canplay', ready);
+            audio.addEventListener('canplaythrough', ready);
+            setTimeout(ready, 5000);
+          });
+        }
+        if (audio.paused) {
+          playPromise = audio.play();
+          await playPromise;
+          isPlaying = true;
+          console.log(`▶️ Playing: ${musicTracks[currentTrackIndex].name}`);
+        }
+        isLoading = false;
+        return true;
+      } catch (e) {
+        isPlaying = false; playPromise = null; isLoading = false;
+        if (e.name === "NotAllowedError") {
+          if (!userHasInteracted && !autoplayAttempted) {
+            console.log("🔇 Autoplay blocked - waiting for user");
+            autoplayAttempted = true;
+          }
+        } else if (e.name !== "AbortError") console.warn("❌ Play failed:", e.name);
+        return false;
+      }
+    };
+
+    const safePause = async () => { if (!audio.paused) { audio.pause(); isPlaying = false; } };
+
+    const playNextTrack = async () => { if (!audioInitialized) return; await safePause(); await selectRandomTrack(); await safePlay(); };
+
+    const initializeAudio = async () => {
+      if (audioInitialized) return true;
+      userHasInteracted = true;
+      console.log("🎶 Initializing audio system...");
+      await selectRandomTrack();
+      if (await safePlay()) {
+        audioInitialized = true;
+        removeInteractionListeners();
+        preloadBatch();
+        console.log("🎉 Audio ready!");
+        return true;
+      }
+      return false;
+    };
+
+    const handleUserInteraction = async () => { if (!audioInitialized) await initializeAudio(); };
+
+    const interactionEvents = ["click","touchstart","keydown","scroll","mousemove"];
+    const addInteractionListeners = () => interactionEvents.forEach(evt => document.addEventListener(evt, handleUserInteraction, { once: true }));
+    const removeInteractionListeners = () => interactionEvents.forEach(evt => document.removeEventListener(evt, handleUserInteraction, { once: true }));
+
+    const attemptAutoplay = async () => {
+      await preloadTrack(0);
+      await selectRandomTrack();
+      if (await safePlay()) { audioInitialized = true; preloadBatch(); }
+      else addInteractionListeners();
+    };
+
+    audio.addEventListener("ended", playNextTrack);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) safePause(); else if (!isPlaying && audioInitialized) safePlay(); });
+
+    const init = () => {
+      console.log("%c🎼 WangYi Audio System Booting...", "color:#4ade80;font-weight:bold;");
+      setTimeout(attemptAutoplay, 100);
+      setTimeout(() => { if (!audioInitialized) { console.log("🔔 Tap anywhere to start music 🎵"); addInteractionListeners(); } }, 2000);
+    };
+    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", init) : init();
+  </script>
+</body>
+</html>
