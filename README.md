@@ -9,7 +9,7 @@
 ## 🍃 Information
 - 🧨 **Languages:** JavaScript, SCSS, CSS, HTML  
 - 🎨 **Frameworks & Styling:** ReactJS, TailwindCSS  
-- ⚡ **API Integrations:** GitHub, Lanyard, Open Weather Map  
+- ⚡ **API Integrations:** GitHub, Lanyard, Open Weather Map, Hoyoverse Api
 
 ---
 
